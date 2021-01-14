@@ -1,0 +1,6 @@
+<resources>
+    <string name="app_name">MyUserList</string>
+    <string name="a_random_user_name_for_display">A random user name for display</string>
+    <string name="a_random_user">A random user</string>
+    <string name="my_user_list">My User List</string>
+</resources>
