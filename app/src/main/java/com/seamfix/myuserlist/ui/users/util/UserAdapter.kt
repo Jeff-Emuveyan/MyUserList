@@ -3,9 +3,11 @@ package com.seamfix.myuserlist.ui.users.util
 import android.content.Context
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.fragment.app.FragmentManager
 import androidx.recyclerview.widget.RecyclerView
 import com.seamfix.myuserlist.R
 import com.seamfix.myuserlist.model.User
+import com.seamfix.myuserlist.ui.users.userdetail.UserDetailBottomSheet
 import com.squareup.picasso.Callback
 import com.squareup.picasso.Picasso
 import java.lang.Exception
@@ -14,10 +16,12 @@ class UserAdapter() : RecyclerView.Adapter<UserItem>() {
 
     lateinit var context: Context
     var users: List<User>? = null
+    lateinit var fragmentManager: FragmentManager
 
-    constructor(context: Context, users: List<User>?): this(){
+    constructor(context: Context, fragmentManager: FragmentManager, users: List<User>?): this(){
         this.context = context
         this.users = users
+        this.fragmentManager = fragmentManager
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): UserItem {
@@ -52,6 +56,12 @@ class UserAdapter() : RecyclerView.Adapter<UserItem>() {
                         holder.shimmerView.hideShimmer()
                     }
                 })
+
+            //handle clicks:
+            holder.parentLayout.setOnClickListener {
+                //lunch the bottom sheet that shows a user's detail
+                UserDetailBottomSheet(user).show(fragmentManager, UserAdapter::class.java.simpleName)
+            }
 
         }
     }

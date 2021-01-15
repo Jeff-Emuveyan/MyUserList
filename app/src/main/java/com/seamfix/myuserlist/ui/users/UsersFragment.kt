@@ -52,6 +52,7 @@ class UsersFragment : Fragment() {
     }
 
 
+
     /*** Fetches users and displays them in the recyclerView ***/
     private suspend fun displayUsers(viewModel: UsersViewModel) {
         setUpUI(UIState.LOADING)

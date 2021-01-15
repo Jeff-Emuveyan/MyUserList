@@ -4,6 +4,7 @@ import android.content.Context
 import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.recyclerview.widget.RecyclerView
 import com.facebook.shimmer.Shimmer
 import com.facebook.shimmer.ShimmerFrameLayout
@@ -16,5 +17,5 @@ class UserItem(v: View): RecyclerView.ViewHolder(v) {
     var tvEmail: TextView =  v.findViewById(R.id.tvEmail)
     var imageView: ImageView = v.findViewById(R.id.profile_image)
     var shimmerView: ShimmerFrameLayout = v.findViewById(R.id.shimmerView)
-
+    var parentLayout: ConstraintLayout = v.findViewById(R.id.parent_layout)
 }

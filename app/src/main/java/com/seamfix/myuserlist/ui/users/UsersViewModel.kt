@@ -13,7 +13,7 @@ class UsersViewModel : ViewModel() {
         var users: List<User>? = null
 
         if(userRepository != null){
-            //get user from remote database:
+            //get users from remote database:
             users = userRepository?.getUsersFromRemote()
 
             if(users == null){//if no user was found, we fetch from local database:

@@ -15,4 +15,9 @@ class Location( var street: String,
                 var city: String,
                 var state: String,
                 var country: String,
-                var timezone: String)
+                var timezone: String){
+
+    override fun toString(): String {
+        return "Street: $street, city: $city, state: $state, country: $country, timezone: $timezone."
+    }
+}
