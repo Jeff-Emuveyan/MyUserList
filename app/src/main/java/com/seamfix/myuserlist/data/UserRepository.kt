@@ -1,5 +1,6 @@
 package com.seamfix.myuserlist.data
 
+import com.seamfix.myuserlist.datasource.local.AppDatabase
 import com.seamfix.myuserlist.datasource.remote.Service
 import com.seamfix.myuserlist.model.User
 import com.seamfix.myuserlist.model.UserResponse
@@ -8,6 +9,20 @@ import javax.inject.Inject
 class UserRepository @Inject constructor() {
 
     var service: Service? = null
+    var database: AppDatabase? = null
+
+
+    suspend fun saveUser(newUser: User){
+        //Before saving a user, we first check if the user already exists:
+        val oldUser = database?.userDao()?.getUserByID(newUser.id)
+
+        if(oldUser == null){
+            database?.userDao()?.saveUser(newUser)
+        }else{
+            database?.userDao()?.updateUser(newUser)
+        }
+    }
+
 
     /***  Fetches a user from remote database ***/
     suspend fun getUserFromRemote(userID: String): User?{
@@ -28,7 +43,7 @@ class UserRepository @Inject constructor() {
 
     /***  Fetches a user locally from the database ***/
     suspend fun getUserLocally(userID: String): User?{
-        return null
+        return database?.userDao()?.getUserByID(userID)
     }
 
     /***  Fetches users from remote database ***/
@@ -50,7 +65,7 @@ class UserRepository @Inject constructor() {
 
 
     /***  Fetches users locally from the database ***/
-    suspend fun getUsersLocally(): ArrayList<User>?{
-        return null
+    suspend fun getUsersLocally(): List<User>?{
+        return database?.userDao()?.getAllUsers()
     }
 }

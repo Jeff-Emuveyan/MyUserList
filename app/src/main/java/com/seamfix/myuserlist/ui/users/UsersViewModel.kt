@@ -16,10 +16,22 @@ class UsersViewModel : ViewModel() {
             //get users from remote database:
             users = userRepository?.getUsersFromRemote()
 
-            if(users == null){//if no user was found, we fetch from local database:
+            if(users != null){
+                //if we were able to fetch user's from  the service, then we need to save these users
+                // in the local database for offline purpose:
+                saveUsers(users)
+
+            }else{//if no user was found, we fetch from local database:
                 users =  userRepository?.getUsersLocally()
             }
         }
         return users
+    }
+
+
+    suspend fun saveUsers(users: List<User>){
+        for(user in users){
+            userRepository?.saveUser(user)
+        }
     }
 }
