@@ -1,14 +1,14 @@
 package com.seamfix.myuserlist.ui.users.userdetail
 
 import android.util.Log
+import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.ViewModel
 import com.seamfix.myuserlist.data.UserRepository
 import com.seamfix.myuserlist.model.User
 import javax.inject.Inject
 
-class UserDetailViewModel @Inject constructor() : ViewModel() {
-
-    var userRepository: UserRepository? = null
+class UserDetailViewModel @ViewModelInject constructor(var userRepository: UserRepository?)
+    : ViewModel() {
 
     /***  Returns a user from either remote database or local database ***/
     suspend fun getUser(userID: String): User? {
@@ -30,7 +30,7 @@ class UserDetailViewModel @Inject constructor() : ViewModel() {
         return user
     }
 
-
+    /*** Saves a user to the database ***/
     suspend fun saveUser(user: User){
         userRepository?.saveUser(user)
     }

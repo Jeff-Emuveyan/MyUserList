@@ -6,12 +6,14 @@ import com.seamfix.myuserlist.model.User
 import com.seamfix.myuserlist.model.UserResponse
 import javax.inject.Inject
 
-class UserRepository @Inject constructor() {
+class UserRepository() {
 
     var service: Service? = null
     var database: AppDatabase? = null
 
 
+    /*** Saves a user to the local database. If the user already exists, the copy in the database
+     * will be updated with the new user data. */
     suspend fun saveUser(newUser: User){
         //Before saving a user, we first check if the user already exists:
         val oldUser = database?.userDao()?.getUserByID(newUser.id)

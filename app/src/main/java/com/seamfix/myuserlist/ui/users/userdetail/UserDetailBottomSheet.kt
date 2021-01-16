@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
@@ -27,11 +28,8 @@ import javax.inject.Inject
 @AndroidEntryPoint
 class UserDetailBottomSheet(var user: User) : BottomSheetDialogFragment() {
 
-    //Inject the repository
-    @Inject
-    lateinit var repo: UserRepository
-
-    private lateinit var viewModel: UserDetailViewModel
+    /*** ViewModel to be Injected by Hilt ***/
+    private val viewModel: UserDetailViewModel by viewModels()
 
     companion object{
         /***  A static variable that will be true if any instance of this class is visible ***/
@@ -54,8 +52,6 @@ class UserDetailBottomSheet(var user: User) : BottomSheetDialogFragment() {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         isSheetOpen = true
-        viewModel = ViewModelProvider(this).get(UserDetailViewModel::class.java)
-        viewModel.userRepository = repo
 
         //We start fetching the user:
         lifecycleScope.launch {
@@ -85,15 +81,16 @@ class UserDetailBottomSheet(var user: User) : BottomSheetDialogFragment() {
     }
 
 
+    /*** This method controls the UI of the BottomSheet ***/
     private fun setUpUIState(uiState: UIState, user: User? = null){
         when(uiState){
-            UIState.LOADING ->{
+            UIState.LOADING ->{//determines UI state when data is loading:
                 view_no_data?.visibility = View.VISIBLE
                 view_has_data?.visibility = View.GONE
                 tvError?.visibility = View.GONE
                 tvNoInternetConnection?.visibility = View.GONE
             }
-            UIState.DATA_FOUND ->{
+            UIState.DATA_FOUND ->{//determines UI state when data is found:
                 view_no_data?.visibility = View.GONE
                 view_has_data?.visibility = View.VISIBLE
                 tvError?.visibility = View.GONE
@@ -118,7 +115,7 @@ class UserDetailBottomSheet(var user: User) : BottomSheetDialogFragment() {
                 //it means that some of the user's details will not be updated because the device
                 //is now offline (details such as Gender, Birthday, Location). In this case,
                 //we need to hide the parent layout displaying gender, birthday and location so that
-                //the user does not see null values.s
+                //the user does not see null values.
                 if(user != null && user.isUserInformationComplete()){
                     view_has_data?.layout_more_details?.visibility =  View.VISIBLE
                 }else{
@@ -126,7 +123,7 @@ class UserDetailBottomSheet(var user: User) : BottomSheetDialogFragment() {
                 }
             }
 
-            UIState.NO_DATA ->{
+            UIState.NO_DATA ->{//determines UI state when there is no data to show:
                 view_no_data?.visibility = View.GONE
                 view_has_data?.visibility = View.GONE
                 tvError?.visibility = View.VISIBLE

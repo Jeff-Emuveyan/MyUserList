@@ -30,7 +30,7 @@ class NetworkChecker(var context: Context?): Runnable {
 
 
     /***  Returns true of the device has a network or wifi connection ***/
-    fun haveNetworkConnection(context: Context?): Boolean {
+    private fun haveNetworkConnection(context: Context?): Boolean {
         var haveConnectedWifi = false
         var haveConnectedMobile = false
         if (context != null) {

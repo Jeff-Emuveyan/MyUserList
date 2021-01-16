@@ -6,6 +6,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.lifecycle.lifecycleScope
 import com.seamfix.myuserlist.R
@@ -22,15 +23,14 @@ import javax.inject.Inject
 @AndroidEntryPoint
 class UsersFragment : Fragment() {
 
-    //Inject the repository
-    @Inject lateinit var repo: UserRepository
+    //Inject dependencies:
     @Inject lateinit var networkChecker: NetworkChecker
+    /*** ViewModel to be Injected by Hilt ***/
+    private val viewModel: UsersViewModel by viewModels()
 
     companion object {
         fun newInstance() = UsersFragment()
     }
-
-    private lateinit var viewModel: UsersViewModel
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View {
@@ -39,8 +39,6 @@ class UsersFragment : Fragment() {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        viewModel = ViewModelProvider(this).get(UsersViewModel::class.java)
-        viewModel.userRepository = repo
         viewModel.startNetworkChecking(networkChecker)
 
         //When the fragment loads, we display the users:

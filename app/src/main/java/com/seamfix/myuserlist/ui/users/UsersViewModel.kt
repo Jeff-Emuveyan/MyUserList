@@ -1,13 +1,13 @@
 package com.seamfix.myuserlist.ui.users
 
+import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.ViewModel
 import com.seamfix.myuserlist.data.UserRepository
 import com.seamfix.myuserlist.model.User
 import com.seamfix.myuserlist.util.NetworkChecker
 
-class UsersViewModel : ViewModel() {
-
-    var userRepository: UserRepository? = null
+class UsersViewModel @ViewModelInject constructor(var userRepository: UserRepository?)
+    : ViewModel() {
 
     /***  Returns a list of users from either remote database or local database ***/
     suspend fun getUsers(): List<User>?{
@@ -30,7 +30,8 @@ class UsersViewModel : ViewModel() {
     }
 
 
-    suspend fun saveUsers(users: List<User>){
+    /*** Saves a list of users to the database ***/
+    private suspend fun saveUsers(users: List<User>){
         for(user in users){
             userRepository?.saveUser(user)
         }
