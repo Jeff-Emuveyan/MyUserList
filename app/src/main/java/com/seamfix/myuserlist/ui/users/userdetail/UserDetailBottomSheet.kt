@@ -18,6 +18,7 @@ import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.user_detail_bottom_sheet.*
 import kotlinx.android.synthetic.main.user_detail_bottom_sheet.tvNoInternetConnection
 import kotlinx.android.synthetic.main.user_detail_has_data.view.*
+import kotlinx.android.synthetic.main.user_item.view.*
 import kotlinx.android.synthetic.main.users_fragment.*
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -53,7 +54,6 @@ class UserDetailBottomSheet(var user: User) : BottomSheetDialogFragment() {
         lifecycleScope.launch {
             getUser(user.id)
         }
-
 
         //set a listener to listen for network changes:
         NetworkChecker.canConnect.observe(viewLifecycleOwner, Observer {
@@ -105,6 +105,18 @@ class UserDetailBottomSheet(var user: User) : BottomSheetDialogFragment() {
                 //load the profile photo
                 Picasso.get().load(user?.picture).placeholder(R.drawable.person)
                         .error(R.drawable.ic_broken_image).into(view_has_data?.ivPhoto)
+
+                //Now, there is a case we have to handle: If there is no network when this bottom sheet
+                //opens, and this is the first time the bottom sheet is opened for a particular user,
+                //it means that some of the user's details will not be updated because the device
+                //is now offline (details such as Gender, Birthday, Location). In this case,
+                //we need to hide the parent layout displaying gender, birthday and location so that
+                //the user does not see null values.s
+                if(user != null && user.isUserInformationComplete()){
+                    view_has_data?.layout_more_details?.visibility =  View.VISIBLE
+                }else{
+                    view_has_data?.layout_more_details?.visibility =  View.GONE
+                }
             }
 
             UIState.NO_DATA ->{
