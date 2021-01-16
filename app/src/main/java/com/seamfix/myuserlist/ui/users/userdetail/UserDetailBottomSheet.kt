@@ -1,5 +1,6 @@
 package com.seamfix.myuserlist.ui.users.userdetail
 
+import android.content.DialogInterface
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -32,6 +33,11 @@ class UserDetailBottomSheet(var user: User) : BottomSheetDialogFragment() {
 
     private lateinit var viewModel: UserDetailViewModel
 
+    companion object{
+        /***  A static variable that will be true if any instance of this class is visible ***/
+        var isSheetOpen:Boolean = false
+    }
+
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?
     ): View? {
@@ -47,6 +53,7 @@ class UserDetailBottomSheet(var user: User) : BottomSheetDialogFragment() {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
+        isSheetOpen = true
         viewModel = ViewModelProvider(this).get(UserDetailViewModel::class.java)
         viewModel.userRepository = repo
 
@@ -138,4 +145,9 @@ class UserDetailBottomSheet(var user: User) : BottomSheetDialogFragment() {
         }
     }
 
+
+    override fun onDismiss(dialog: DialogInterface) {
+        super.onDismiss(dialog)
+        isSheetOpen = false
+    }
 }

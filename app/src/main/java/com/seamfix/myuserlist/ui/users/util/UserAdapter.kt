@@ -59,8 +59,10 @@ class UserAdapter() : RecyclerView.Adapter<UserItem>() {
 
             //handle clicks:
             holder.parentLayout.setOnClickListener {
-                //lunch the bottom sheet that shows a user's detail
-                UserDetailBottomSheet(user).show(fragmentManager, UserAdapter::class.java.simpleName)
+                //lunch the bottom sheet that shows a user's detail:
+                if(!UserDetailBottomSheet.isSheetOpen){//a check if no sheet is currently visible.
+                    UserDetailBottomSheet(user).show(fragmentManager, UserAdapter::class.java.simpleName)
+                }
             }
 
         }
