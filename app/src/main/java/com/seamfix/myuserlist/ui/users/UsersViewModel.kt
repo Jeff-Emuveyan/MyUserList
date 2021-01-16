@@ -3,6 +3,7 @@ package com.seamfix.myuserlist.ui.users
 import androidx.lifecycle.ViewModel
 import com.seamfix.myuserlist.data.UserRepository
 import com.seamfix.myuserlist.model.User
+import com.seamfix.myuserlist.util.NetworkChecker
 
 class UsersViewModel : ViewModel() {
 
@@ -33,5 +34,11 @@ class UsersViewModel : ViewModel() {
         for(user in users){
             userRepository?.saveUser(user)
         }
+    }
+
+
+    /*** Starts the thread to listen for network or WIFI state ***/
+    fun startNetworkChecking(networkChecker: NetworkChecker){
+        Thread(networkChecker).start()
     }
 }

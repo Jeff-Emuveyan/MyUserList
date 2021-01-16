@@ -16,6 +16,7 @@ fun UsersFragment.setUpUI(uiState: UIState, users: List<User>? = null){
             shimmer_view?.visibility = View.VISIBLE
             tvRetry?.visibility = View.INVISIBLE
             recyclerView?.visibility = View.INVISIBLE
+            tvNoInternetConnection?.visibility = View.GONE
             //show the refresh animation:
             swipeRefreshLayout.isRefreshing = true
         }
@@ -24,6 +25,7 @@ fun UsersFragment.setUpUI(uiState: UIState, users: List<User>? = null){
             shimmer_view?.visibility = View.INVISIBLE
             tvRetry?.visibility = View.INVISIBLE
             recyclerView?.visibility = View.VISIBLE
+            tvNoInternetConnection?.visibility = View.GONE
             //hide the refresh animation:
             swipeRefreshLayout?.isRefreshing = false
 
@@ -41,8 +43,19 @@ fun UsersFragment.setUpUI(uiState: UIState, users: List<User>? = null){
             shimmer_view?.visibility = View.INVISIBLE
             tvRetry?.visibility = View.VISIBLE
             recyclerView?.visibility = View.INVISIBLE
+            tvNoInternetConnection?.visibility = View.GONE
             //hide the refresh animation:
             swipeRefreshLayout?.isRefreshing = false
+        }
+
+        UIState.NO_NETWORK_CONNECTION ->{
+            //determines the UI state when there is no network:
+            tvNoInternetConnection?.visibility = View.VISIBLE
+        }
+
+        UIState.NETWORK_CONNECTION_AVAILABLE ->{
+            //determines the UI state when there is no network:
+            tvNoInternetConnection?.visibility = View.GONE
         }
     }
 }
@@ -51,5 +64,7 @@ fun UsersFragment.setUpUI(uiState: UIState, users: List<User>? = null){
 enum class UIState{
     LOADING,
     DATA_FOUND,
-    NO_DATA
+    NO_DATA,
+    NO_NETWORK_CONNECTION,
+    NETWORK_CONNECTION_AVAILABLE,
 }

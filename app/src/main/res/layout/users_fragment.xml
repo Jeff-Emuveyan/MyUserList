@@ -25,6 +25,22 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
+            <TextView
+                android:id="@+id/tvNoInternetConnection"
+                android:layout_width="0dp"
+                android:layout_height="?attr/actionBarSize"
+                android:fontFamily="@font/lato_bold"
+                android:visibility="gone"
+                android:gravity="center"
+                android:text="@string/oops_no_internet_connection_you_are_offline"
+                android:textColor="@color/yellow"
+                android:background="@color/black"
+                android:textStyle="bold"
+                android:textSize="@dimen/text_size_default"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/header" />
+
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/recyclerView"
                 android:layout_width="0dp"
@@ -32,7 +48,7 @@
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/header" />
+                app:layout_constraintTop_toBottomOf="@+id/tvNoInternetConnection" />
 
 
             <TextView

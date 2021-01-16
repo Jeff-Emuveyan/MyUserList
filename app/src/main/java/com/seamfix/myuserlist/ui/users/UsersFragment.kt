@@ -6,11 +6,13 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.lifecycle.Observer
 import androidx.lifecycle.lifecycleScope
 import com.seamfix.myuserlist.R
 import com.seamfix.myuserlist.data.UserRepository
 import com.seamfix.myuserlist.ui.users.util.UIState
 import com.seamfix.myuserlist.ui.users.util.setUpUI
+import com.seamfix.myuserlist.util.NetworkChecker
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.users_fragment.*
 import kotlinx.coroutines.launch
@@ -22,6 +24,7 @@ class UsersFragment : Fragment() {
 
     //Inject the repository
     @Inject lateinit var repo: UserRepository
+    @Inject lateinit var networkChecker: NetworkChecker
 
     companion object {
         fun newInstance() = UsersFragment()
@@ -38,17 +41,28 @@ class UsersFragment : Fragment() {
         super.onActivityCreated(savedInstanceState)
         viewModel = ViewModelProvider(this).get(UsersViewModel::class.java)
         viewModel.userRepository = repo
+        viewModel.startNetworkChecking(networkChecker)
 
+        //When the fragment loads, we display the users:
+        lifecycleScope.launch{
+            displayUsers(viewModel)
+        }
+
+        // determine what happens when the user swipes on the screen:
         swipeRefreshLayout.setOnRefreshListener {
             lifecycleScope.launch{
                 displayUsers(viewModel)
             }
         }
 
-        //When the fragment loads, we display the users:
-        lifecycleScope.launch{
-            displayUsers(viewModel)
-        }
+        //set a listener to listen for network changes:
+        NetworkChecker.canConnect.observe(viewLifecycleOwner, Observer {
+            if(it){
+                setUpUI(UIState.NETWORK_CONNECTION_AVAILABLE)
+            }else{
+                setUpUI(UIState.NO_NETWORK_CONNECTION)
+            }
+        })
     }
 
 

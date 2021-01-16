@@ -5,6 +5,7 @@ import com.seamfix.myuserlist.data.UserRepository
 import com.seamfix.myuserlist.datasource.local.AppDatabase
 import com.seamfix.myuserlist.datasource.remote.ApiClient
 import com.seamfix.myuserlist.datasource.remote.Service
+import com.seamfix.myuserlist.util.NetworkChecker
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -26,5 +27,10 @@ object ThirdPartyMode {
         repository.service = service
         repository.database = db
         return repository
+    }
+
+    @Provides
+    fun provideNetworkChecker(@ApplicationContext appContext: Context): NetworkChecker{
+        return NetworkChecker(appContext)
     }
 }

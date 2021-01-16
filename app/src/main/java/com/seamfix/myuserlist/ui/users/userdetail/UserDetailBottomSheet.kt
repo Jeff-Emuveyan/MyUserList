@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
@@ -11,10 +12,13 @@ import com.seamfix.myuserlist.R
 import com.seamfix.myuserlist.data.UserRepository
 import com.seamfix.myuserlist.model.User
 import com.seamfix.myuserlist.ui.users.util.UIState
+import com.seamfix.myuserlist.util.NetworkChecker
 import com.squareup.picasso.Picasso
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.user_detail_bottom_sheet.*
+import kotlinx.android.synthetic.main.user_detail_bottom_sheet.tvNoInternetConnection
 import kotlinx.android.synthetic.main.user_detail_has_data.view.*
+import kotlinx.android.synthetic.main.users_fragment.*
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -49,6 +53,16 @@ class UserDetailBottomSheet(var user: User) : BottomSheetDialogFragment() {
         lifecycleScope.launch {
             getUser(user.id)
         }
+
+
+        //set a listener to listen for network changes:
+        NetworkChecker.canConnect.observe(viewLifecycleOwner, Observer {
+            if(it){
+                setUpUIState(UIState.NETWORK_CONNECTION_AVAILABLE)
+            }else{
+                setUpUIState(UIState.NO_NETWORK_CONNECTION)
+            }
+        })
     }
 
 
@@ -70,11 +84,13 @@ class UserDetailBottomSheet(var user: User) : BottomSheetDialogFragment() {
                 view_no_data?.visibility = View.VISIBLE
                 view_has_data?.visibility = View.GONE
                 tvError?.visibility = View.GONE
+                tvNoInternetConnection?.visibility = View.GONE
             }
             UIState.DATA_FOUND ->{
                 view_no_data?.visibility = View.GONE
                 view_has_data?.visibility = View.VISIBLE
                 tvError?.visibility = View.GONE
+                tvNoInternetConnection?.visibility = View.GONE
 
                 //bind the data to the views:
                 view_has_data?.name?.text =
@@ -90,10 +106,22 @@ class UserDetailBottomSheet(var user: User) : BottomSheetDialogFragment() {
                 Picasso.get().load(user?.picture).placeholder(R.drawable.person)
                         .error(R.drawable.ic_broken_image).into(view_has_data?.ivPhoto)
             }
+
             UIState.NO_DATA ->{
                 view_no_data?.visibility = View.GONE
                 view_has_data?.visibility = View.GONE
                 tvError?.visibility = View.VISIBLE
+                tvNoInternetConnection?.visibility = View.GONE
+            }
+
+            UIState.NO_NETWORK_CONNECTION ->{
+                //determines the UI state when there is no network:
+                tvNoInternetConnection?.visibility = View.VISIBLE
+            }
+
+            UIState.NETWORK_CONNECTION_AVAILABLE ->{
+                //determines the UI state when there is no network:
+                tvNoInternetConnection?.visibility = View.GONE
             }
         }
     }
