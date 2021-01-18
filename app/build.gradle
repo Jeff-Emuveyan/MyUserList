@@ -111,6 +111,10 @@ dependencies {
         exclude group: 'com.google.code.gson'
     }
     testImplementation 'junit:junit:4.13.1'
+    //Roboelectric
+    testImplementation 'androidx.test:core:1.3.0'
+    //Mockito framework( use this mockito. It is preferred because it supports suspend functions)
+    testImplementation 'com.nhaarman.mockitokotlin2:mockito-kotlin:2.2.0'
     androidTestImplementation 'androidx.test.ext:junit:1.1.2'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'
 }
