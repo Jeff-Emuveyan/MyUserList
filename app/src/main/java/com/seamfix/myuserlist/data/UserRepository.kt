@@ -27,7 +27,7 @@ open class UserRepository() {
 
 
     /***  Fetches a user from remote database ***/
-    suspend fun getUserFromRemote(userID: String): User?{
+    open suspend fun getUserFromRemote(userID: String): User?{
 
         return try {
             val response = service?.fetchUser(userID) ?: return null
@@ -44,7 +44,7 @@ open class UserRepository() {
 
 
     /***  Fetches a user locally from the database ***/
-    suspend fun getUserLocally(userID: String): User?{
+    open suspend fun getUserLocally(userID: String): User?{
         return database?.userDao()?.getUserByID(userID)
     }
 
