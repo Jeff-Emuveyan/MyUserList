@@ -6,7 +6,7 @@ import com.seamfix.myuserlist.model.User
 import com.seamfix.myuserlist.model.UserResponse
 import javax.inject.Inject
 
-class UserRepository() {
+open class UserRepository() {
 
     var service: Service? = null
     var database: AppDatabase? = null
@@ -14,7 +14,7 @@ class UserRepository() {
 
     /*** Saves a user to the local database. If the user already exists, the copy in the database
      * will be updated with the new user data. */
-    suspend fun saveUser(newUser: User){
+    open suspend fun saveUser(newUser: User){
         //Before saving a user, we first check if the user already exists:
         val oldUser = database?.userDao()?.getUserByID(newUser.id)
 
@@ -49,7 +49,7 @@ class UserRepository() {
     }
 
     /***  Fetches users from remote database ***/
-    suspend fun getUsersFromRemote(): ArrayList<User>?{
+    open suspend fun getUsersFromRemote(): ArrayList<User>?{
 
         return try {
             val response = service?.fetchUsers() ?: return null
@@ -67,7 +67,7 @@ class UserRepository() {
 
 
     /***  Fetches users locally from the database ***/
-    suspend fun getUsersLocally(): List<User>?{
+    open suspend fun getUsersLocally(): List<User>?{
         return database?.userDao()?.getAllUsers()
     }
 }

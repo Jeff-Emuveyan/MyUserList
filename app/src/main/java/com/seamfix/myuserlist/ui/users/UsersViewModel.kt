@@ -6,7 +6,7 @@ import com.seamfix.myuserlist.data.UserRepository
 import com.seamfix.myuserlist.model.User
 import com.seamfix.myuserlist.util.NetworkChecker
 
-class UsersViewModel @ViewModelInject constructor(var userRepository: UserRepository?)
+open class UsersViewModel @ViewModelInject constructor(var userRepository: UserRepository?)
     : ViewModel() {
 
     /***  Returns a list of users from either remote database or local database ***/
@@ -31,7 +31,7 @@ class UsersViewModel @ViewModelInject constructor(var userRepository: UserReposi
 
 
     /*** Saves a list of users to the database ***/
-    private suspend fun saveUsers(users: List<User>){
+    suspend fun saveUsers(users: List<User>){
         for(user in users){
             userRepository?.saveUser(user)
         }
