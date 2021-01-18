@@ -7,6 +7,10 @@ import java.io.InputStream
 import java.nio.ByteBuffer
 import java.nio.charset.Charset
 
+
+/*** This is just a FAKE class used for testing purposes only.
+ * There is no need to provide implementations for it methods.
+ * ***/
 class FakeResponseBody: ResponseBody() {
     override fun contentType(): MediaType? {
         return null
