@@ -14,7 +14,7 @@ import dagger.hilt.android.qualifiers.ApplicationContext
 
 @Module
 @InstallIn(ActivityComponent::class)
-object ThirdPartyMode {
+object HiltModule {
 
     /***  Create UserRepository ***/
     @Provides
